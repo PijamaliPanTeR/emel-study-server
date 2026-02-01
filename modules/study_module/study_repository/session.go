@@ -10,18 +10,17 @@ import (
 )
 
 func (r *StudyRepositoryImpl) GetSessionByID(ctx context.Context, sessionID string) (*study_models.SessionData, error) {
-	q := `SELECT id, current_step, positions, group_info, listened_sound_ids, sound_groups
+	q := `SELECT id, current_step, positions, group_info, listened_sound_ids
 		FROM study_sessions WHERE id = $1`
 	var (
-		id              string
-		currentStep     string
-		positionsJSON   sql.NullString
-		groupInfoJSON   sql.NullString
-		listenedJSON    sql.NullString
-		soundGroupsJSON sql.NullString
+		id            string
+		currentStep   string
+		positionsJSON sql.NullString
+		groupInfoJSON sql.NullString
+		listenedJSON  sql.NullString
 	)
 	err := r.DB.QueryRowContext(ctx, q, sessionID).Scan(
-		&id, &currentStep, &positionsJSON, &groupInfoJSON, &listenedJSON, &soundGroupsJSON,
+		&id, &currentStep, &positionsJSON, &groupInfoJSON, &listenedJSON,
 	)
 	if err == sql.ErrNoRows {
 		return nil, nil
@@ -38,9 +37,6 @@ func (r *StudyRepositoryImpl) GetSessionByID(ctx context.Context, sessionID stri
 	}
 	if listenedJSON.Valid && listenedJSON.String != "" {
 		_ = json.Unmarshal([]byte(listenedJSON.String), &sess.ListenedSoundIDs)
-	}
-	if soundGroupsJSON.Valid && soundGroupsJSON.String != "" {
-		_ = json.Unmarshal([]byte(soundGroupsJSON.String), &sess.SoundGroups)
 	}
 	return sess, nil
 }
@@ -61,20 +57,18 @@ func (r *StudyRepositoryImpl) UpsertSession(ctx context.Context, sess *study_mod
 	positionsJSON, _ := json.Marshal(sess.Positions)
 	groupInfoJSON, _ := json.Marshal(sess.GroupInfo)
 	listenedJSON, _ := json.Marshal(sess.ListenedSoundIDs)
-	soundGroupsJSON, _ := json.Marshal(sess.SoundGroups)
 
-	q := `INSERT INTO study_sessions (id, current_step, positions, group_info, listened_sound_ids, sound_groups, updated_at)
-		VALUES ($1, $2, $3, $4, $5, $6, now())
+	q := `INSERT INTO study_sessions (id, current_step, positions, group_info, listened_sound_ids, updated_at)
+		VALUES ($1, $2, $3, $4, $5, now())
 		ON CONFLICT (id) DO UPDATE SET
 			current_step = EXCLUDED.current_step,
 			positions = EXCLUDED.positions,
 			group_info = EXCLUDED.group_info,
 			listened_sound_ids = EXCLUDED.listened_sound_ids,
-			sound_groups = EXCLUDED.sound_groups,
 			updated_at = now()`
 	_, err := r.DB.ExecContext(ctx, q,
 		sess.ID, sess.CurrentStep, string(positionsJSON), string(groupInfoJSON),
-		string(listenedJSON), string(soundGroupsJSON),
+		string(listenedJSON),
 	)
 	return err
 }

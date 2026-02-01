@@ -8,7 +8,6 @@ CREATE TABLE IF NOT EXISTS study_sessions
     positions           jsonb,
     group_info          jsonb,
     listened_sound_ids  jsonb,
-    sound_groups        jsonb,
     created_at          timestamp NOT NULL DEFAULT now(),
     updated_at          timestamp NOT NULL DEFAULT now()
 );

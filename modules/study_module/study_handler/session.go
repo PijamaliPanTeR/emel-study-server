@@ -28,9 +28,6 @@ func (h *StudyHandlers) CreateSession(ctx context.Context) fiber.Handler {
 		if len(resp.ListenedSoundIDs) > 0 {
 			out["listenedSoundIds"] = resp.ListenedSoundIDs
 		}
-		if len(resp.SoundGroups) > 0 {
-			out["soundGroups"] = resp.SoundGroups
-		}
 		return c.JSON(out)
 	}
 }

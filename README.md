@@ -31,4 +31,4 @@ Listens on `127.0.0.1:7100` by default (see `conf/local.yml`).
 - `POST /study/session` – create session, returns `{ "sessionId": "..." }` (optional progress for resume)
 - `POST /study/session/:id/map` – body `{ "positions": [{ "soundId", "x", "y" }] }`
 - `POST /study/session/:id/answers` – body `{ "groupStrategy", "groupsRepresent" }`
-- `POST /study/session/:id/progress` – body `{ "currentStep", "listenedSoundIds", "soundGroups", "defineGroupsRectangles" }` (all optional, merge)
+- `POST /study/session/:id/progress` – body `{ "currentStep", "listenedSoundIds", "groupInfo" }` (all optional, merge)

@@ -52,21 +52,18 @@ type CreateSessionResponse struct {
 	Positions        []SoundPosition `json:"positions,omitempty"`
 	GroupInfo        []GroupEntry    `json:"groupInfo,omitempty"`
 	ListenedSoundIDs []string        `json:"listenedSoundIds,omitempty"`
-	SoundGroups      [][]string      `json:"soundGroups,omitempty"`
 }
 
 type SaveProgressRequest struct {
 	CurrentStep      string       `json:"currentStep"`
 	ListenedSoundIDs []string     `json:"listenedSoundIds,omitempty"`
-	SoundGroups      [][]string   `json:"soundGroups,omitempty"`
 	GroupInfo        []GroupEntry `json:"groupInfo,omitempty"`
 }
 
 type SessionData struct {
 	ID               string
 	Positions        []SoundPosition
-	GroupInfo        []GroupEntry // single column: per-group bounds, soundIds, answers (strategy, represent, etc.)
+	GroupInfo        []GroupEntry // per-group bounds, soundIds, answers
 	CurrentStep      string
 	ListenedSoundIDs []string
-	SoundGroups      [][]string
 }

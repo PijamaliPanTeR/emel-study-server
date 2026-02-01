@@ -32,9 +32,6 @@ func (s *StudyService) CreateSession(ctx context.Context, fingerprint string) (*
 			if len(sess.ListenedSoundIDs) > 0 {
 				resp.ListenedSoundIDs = sess.ListenedSoundIDs
 			}
-			if len(sess.SoundGroups) > 0 {
-				resp.SoundGroups = sess.SoundGroups
-			}
 			return resp, nil
 		}
 		_ = s.repo.DeleteFingerprint(ctx, fingerprint)
@@ -111,9 +108,6 @@ func (s *StudyService) SaveProgress(ctx context.Context, sessionID string, req s
 	}
 	if req.ListenedSoundIDs != nil {
 		sess.ListenedSoundIDs = req.ListenedSoundIDs
-	}
-	if req.SoundGroups != nil {
-		sess.SoundGroups = req.SoundGroups
 	}
 	if req.GroupInfo != nil {
 		sess.GroupInfo = req.GroupInfo
