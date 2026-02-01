@@ -3,16 +3,14 @@ package study_repository
 const CreateStudySessionsTableQuery = `
 CREATE TABLE IF NOT EXISTS study_sessions
 (
-    id                          varchar(255) NOT NULL CONSTRAINT study_sessions_pk PRIMARY KEY,
-    current_step                varchar(255) NOT NULL DEFAULT 'welcome',
-    positions                   jsonb,
-    group_strategy              varchar(255),
-    groups_represent            varchar(255),
-    listened_sound_ids          jsonb,
-    sound_groups                jsonb,
-    define_groups_rectangles   jsonb,
-    created_at                  timestamp NOT NULL DEFAULT now(),
-    updated_at                  timestamp NOT NULL DEFAULT now()
+    id                  varchar(255) NOT NULL CONSTRAINT study_sessions_pk PRIMARY KEY,
+    current_step        varchar(255) NOT NULL DEFAULT 'welcome',
+    positions           jsonb,
+    group_info          jsonb,
+    listened_sound_ids  jsonb,
+    sound_groups        jsonb,
+    created_at          timestamp NOT NULL DEFAULT now(),
+    updated_at          timestamp NOT NULL DEFAULT now()
 );
 `
 

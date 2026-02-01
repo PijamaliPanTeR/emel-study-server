@@ -22,17 +22,14 @@ func (h *StudyHandlers) CreateSession(ctx context.Context) fiber.Handler {
 		if len(resp.Positions) > 0 {
 			out["positions"] = resp.Positions
 		}
-		if resp.Answers != nil {
-			out["answers"] = resp.Answers
+		if len(resp.GroupInfo) > 0 {
+			out["groupInfo"] = resp.GroupInfo
 		}
 		if len(resp.ListenedSoundIDs) > 0 {
 			out["listenedSoundIds"] = resp.ListenedSoundIDs
 		}
 		if len(resp.SoundGroups) > 0 {
 			out["soundGroups"] = resp.SoundGroups
-		}
-		if len(resp.DefineGroupsRectangles) > 0 {
-			out["defineGroupsRectangles"] = resp.DefineGroupsRectangles
 		}
 		return c.JSON(out)
 	}

@@ -22,6 +22,14 @@ type SessionAnswersRequest struct {
 	GroupsRepresent string `json:"groupsRepresent"`
 }
 
+// GroupEntry is one group: rectangle (bounds + soundIds) and generic per-group question answers (e.g. strategy, represent).
+// Stored in group_info jsonb as an array of these.
+type GroupEntry struct {
+	Bounds   Bounds            `json:"bounds"`
+	SoundIDs []string          `json:"soundIds"`
+	Answers  map[string]string `json:"answers,omitempty"`
+}
+
 type CreateSessionRequest struct {
 	Fingerprint string `json:"fingerprint"`
 }
@@ -39,28 +47,26 @@ type Bounds struct {
 }
 
 type CreateSessionResponse struct {
-	SessionID              string                 `json:"sessionId"`
-	CurrentStep            string                 `json:"currentStep,omitempty"`
-	Positions              []SoundPosition        `json:"positions,omitempty"`
-	Answers                *SessionAnswersRequest `json:"answers,omitempty"`
-	ListenedSoundIDs       []string               `json:"listenedSoundIds,omitempty"`
-	SoundGroups            [][]string             `json:"soundGroups,omitempty"`
-	DefineGroupsRectangles []DefineGroupRect      `json:"defineGroupsRectangles,omitempty"`
+	SessionID        string          `json:"sessionId"`
+	CurrentStep      string          `json:"currentStep,omitempty"`
+	Positions        []SoundPosition `json:"positions,omitempty"`
+	GroupInfo        []GroupEntry    `json:"groupInfo,omitempty"`
+	ListenedSoundIDs []string        `json:"listenedSoundIds,omitempty"`
+	SoundGroups      [][]string      `json:"soundGroups,omitempty"`
 }
 
 type SaveProgressRequest struct {
-	CurrentStep            string            `json:"currentStep"`
-	ListenedSoundIDs       []string          `json:"listenedSoundIds,omitempty"`
-	SoundGroups            [][]string        `json:"soundGroups,omitempty"`
-	DefineGroupsRectangles []DefineGroupRect `json:"defineGroupsRectangles,omitempty"`
+	CurrentStep      string       `json:"currentStep"`
+	ListenedSoundIDs []string     `json:"listenedSoundIds,omitempty"`
+	SoundGroups      [][]string   `json:"soundGroups,omitempty"`
+	GroupInfo        []GroupEntry `json:"groupInfo,omitempty"`
 }
 
 type SessionData struct {
-	ID                     string
-	Positions              []SoundPosition
-	Answers                SessionAnswersRequest
-	CurrentStep            string
-	ListenedSoundIDs       []string
-	SoundGroups            [][]string
-	DefineGroupsRectangles []DefineGroupRect
+	ID               string
+	Positions        []SoundPosition
+	GroupInfo        []GroupEntry // single column: per-group bounds, soundIds, answers (strategy, represent, etc.)
+	CurrentStep      string
+	ListenedSoundIDs []string
+	SoundGroups      [][]string
 }

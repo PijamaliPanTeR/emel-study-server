@@ -26,17 +26,14 @@ func (s *StudyService) CreateSession(ctx context.Context, fingerprint string) (*
 			if len(sess.Positions) > 0 {
 				resp.Positions = sess.Positions
 			}
-			if sess.Answers.GroupStrategy != "" || sess.Answers.GroupsRepresent != "" {
-				resp.Answers = &sess.Answers
+			if len(sess.GroupInfo) > 0 {
+				resp.GroupInfo = sess.GroupInfo
 			}
 			if len(sess.ListenedSoundIDs) > 0 {
 				resp.ListenedSoundIDs = sess.ListenedSoundIDs
 			}
 			if len(sess.SoundGroups) > 0 {
 				resp.SoundGroups = sess.SoundGroups
-			}
-			if len(sess.DefineGroupsRectangles) > 0 {
-				resp.DefineGroupsRectangles = sess.DefineGroupsRectangles
 			}
 			return resp, nil
 		}
@@ -79,7 +76,25 @@ func (s *StudyService) SaveAnswers(ctx context.Context, sessionID string, answer
 	if sess == nil {
 		sess = &study_models.SessionData{ID: sessionID, CurrentStep: "welcome"}
 	}
-	sess.Answers = answers
+	// Merge into first group's answers so legacy client doesn't lose data
+	if len(sess.GroupInfo) > 0 {
+		if sess.GroupInfo[0].Answers == nil {
+			sess.GroupInfo[0].Answers = make(map[string]string)
+		}
+		if answers.GroupStrategy != "" {
+			sess.GroupInfo[0].Answers["strategy"] = answers.GroupStrategy
+		}
+		if answers.GroupsRepresent != "" {
+			sess.GroupInfo[0].Answers["represent"] = answers.GroupsRepresent
+		}
+	} else {
+		sess.GroupInfo = []study_models.GroupEntry{{
+			Answers: map[string]string{
+				"strategy":  answers.GroupStrategy,
+				"represent": answers.GroupsRepresent,
+			},
+		}}
+	}
 	return s.repo.UpsertSession(ctx, sess)
 }
 
@@ -100,8 +115,8 @@ func (s *StudyService) SaveProgress(ctx context.Context, sessionID string, req s
 	if req.SoundGroups != nil {
 		sess.SoundGroups = req.SoundGroups
 	}
-	if req.DefineGroupsRectangles != nil {
-		sess.DefineGroupsRectangles = req.DefineGroupsRectangles
+	if req.GroupInfo != nil {
+		sess.GroupInfo = req.GroupInfo
 	}
 	return s.repo.UpsertSession(ctx, sess)
 }
