@@ -12,8 +12,21 @@ type ServerConfig struct {
 	Port string `mapstructure:"port"`
 }
 
+type DatabaseConnConfig struct {
+	Host     string `mapstructure:"host"`
+	Port     int    `mapstructure:"port"`
+	User     string `mapstructure:"user"`
+	Password string `mapstructure:"password"`
+	DBName   string `mapstructure:"dbName"`
+}
+
+type DatabaseConfig struct {
+	Conn DatabaseConnConfig `mapstructure:"conn"`
+}
+
 type AppConfig struct {
-	Server ServerConfig `mapstructure:"server"`
+	Server   ServerConfig   `mapstructure:"server"`
+	Database DatabaseConfig `mapstructure:"database"`
 }
 
 func LoadConfig(configPath string) (*AppConfig, error) {

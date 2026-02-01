@@ -59,3 +59,14 @@ type SaveProgressRequest struct {
 	SoundGroups            [][]string        `json:"soundGroups,omitempty"`
 	DefineGroupsRectangles []DefineGroupRect `json:"defineGroupsRectangles,omitempty"`
 }
+
+// SessionData is the persisted session entity (used by repository and service).
+type SessionData struct {
+	ID                     string
+	Positions              []SoundPosition
+	Answers                SessionAnswersRequest
+	CurrentStep            string
+	ListenedSoundIDs       []string
+	SoundGroups            [][]string
+	DefineGroupsRectangles []DefineGroupRect
+}

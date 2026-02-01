@@ -18,6 +18,6 @@ COPY pkg pkg
 # Build your application
 RUN go build -o /emel-study-server-app
 
-EXPOSE 6100
+EXPOSE 7100
 
 ENTRYPOINT [ "/emel-study-server-app",  "-env=local", "-config=./conf/local.yml" ]

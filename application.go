@@ -19,6 +19,12 @@ func main() {
 		log.Fatalf("load config: %v", err)
 	}
 
+	db, err := pkg.NewDB(config.Database.Conn)
+	if err != nil {
+		log.Fatalf("database: %v", err)
+	}
+	defer db.Close()
+
 	app := fiber.New()
 	app.Use(cors.New())
 
@@ -26,7 +32,7 @@ func main() {
 	if _, err := server_module.NewServerModule(ctx, app); err != nil {
 		log.Fatalf("server module: %v", err)
 	}
-	if _, err := study_module.NewStudyModule(ctx, app); err != nil {
+	if _, err := study_module.NewStudyModule(ctx, app, db); err != nil {
 		log.Fatalf("study module: %v", err)
 	}
 

@@ -23,7 +23,7 @@ From repo root:
 go run application.go
 ```
 
-Listens on `127.0.0.1:6100` by default (see `conf/local.yml`).
+Listens on `127.0.0.1:7100` by default (see `conf/local.yml`).
 
 ## API
 

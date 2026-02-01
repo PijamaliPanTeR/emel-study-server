@@ -1,3 +1,10 @@
 server:
   host: "127.0.0.1"
-  port: "6100"
+  port: "7100"
+database:
+  conn:
+    host: localhost
+    port: 7101
+    user: postgres
+    password: postgres
+    dbName: emel-study-server-local

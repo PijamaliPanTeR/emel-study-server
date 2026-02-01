@@ -11,7 +11,7 @@ services:
       - "5432"
     image: postgres:12.2-alpine
     ports:
-      - "6101:5432"
+      - "7101:5432"
     volumes:
       - emel-study-server-data-local:/var/lib/postgresql/data-emel-study-server-local
 
