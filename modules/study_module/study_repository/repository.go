@@ -7,7 +7,6 @@ import (
 	"github.com/emel-study/emel-study-server/modules/study_module/study_models"
 )
 
-// StudyRepository defines persistence for study sessions and fingerprints (same structure as main-service repositories).
 type StudyRepository interface {
 	Init(ctx context.Context) error
 	CreateStudySessionsTable(ctx context.Context, db *sql.DB) error

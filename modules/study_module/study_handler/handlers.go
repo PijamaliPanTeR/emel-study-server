@@ -17,7 +17,6 @@ func NewStudyHandlers(app *fiber.App, service *study_service.StudyService) (*Stu
 }
 
 func (h *StudyHandlers) Init(ctx context.Context) error {
-	h.app.Get("/study/sounds", h.GetSounds(ctx))
 	h.app.Post("/study/session", h.CreateSession(ctx))
 	h.app.Post("/study/session/:id/map", h.SaveMap(ctx))
 	h.app.Post("/study/session/:id/answers", h.SaveAnswers(ctx))

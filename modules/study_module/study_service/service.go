@@ -8,19 +8,11 @@ import (
 )
 
 type StudyService struct {
-	repo   study_repository.StudyRepository
-	sounds []study_models.SoundItem
+	repo study_repository.StudyRepository
 }
 
-func NewStudyService(repo study_repository.StudyRepository, sounds []study_models.SoundItem) *StudyService {
-	return &StudyService{
-		repo:   repo,
-		sounds: sounds,
-	}
-}
-
-func (s *StudyService) GetSounds(ctx context.Context) []study_models.SoundItem {
-	return s.sounds
+func NewStudyService(repo study_repository.StudyRepository) *StudyService {
+	return &StudyService{repo: repo}
 }
 
 func (s *StudyService) CreateSession(ctx context.Context, fingerprint string) (*study_models.CreateSessionResponse, error) {

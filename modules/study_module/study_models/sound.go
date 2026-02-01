@@ -22,18 +22,15 @@ type SessionAnswersRequest struct {
 	GroupsRepresent string `json:"groupsRepresent"`
 }
 
-// CreateSessionRequest is the body for POST /study/session (optional fingerprint for resume).
 type CreateSessionRequest struct {
 	Fingerprint string `json:"fingerprint"`
 }
 
-// DefineGroupRect is one rectangle on the define-groups page (bounds + soundIds).
 type DefineGroupRect struct {
 	Bounds   Bounds   `json:"bounds"`
 	SoundIDs []string `json:"soundIds"`
 }
 
-// Bounds is x, y, width, height.
 type Bounds struct {
 	X      float64 `json:"x"`
 	Y      float64 `json:"y"`
@@ -41,7 +38,6 @@ type Bounds struct {
 	Height float64 `json:"height"`
 }
 
-// CreateSessionResponse returns session and optional progress for resuming.
 type CreateSessionResponse struct {
 	SessionID              string                 `json:"sessionId"`
 	CurrentStep            string                 `json:"currentStep,omitempty"`
@@ -52,7 +48,6 @@ type CreateSessionResponse struct {
 	DefineGroupsRectangles []DefineGroupRect      `json:"defineGroupsRectangles,omitempty"`
 }
 
-// SaveProgressRequest is the body for POST /study/session/:id/progress (all fields optional, merge).
 type SaveProgressRequest struct {
 	CurrentStep            string            `json:"currentStep"`
 	ListenedSoundIDs       []string          `json:"listenedSoundIds,omitempty"`
@@ -60,7 +55,6 @@ type SaveProgressRequest struct {
 	DefineGroupsRectangles []DefineGroupRect `json:"defineGroupsRectangles,omitempty"`
 }
 
-// SessionData is the persisted session entity (used by repository and service).
 type SessionData struct {
 	ID                     string
 	Positions              []SoundPosition

@@ -1,13 +1,13 @@
 # Emel Study Server
 
-Backend for the Emel Study (Sound Map) academic project. Built with Go and Fiber, following the same structure as main-service (modules, pkg, conf).
+Backend for the Emel Study (Sound Map) academic project. Built with Go and Fiber (modules, pkg, conf).
 
 ## Structure
 
 - `pkg/` – config, version, utils
 - `conf/` – YAML config (e.g. `local.yml`)
 - `modules/server_module/` – health check
-- `modules/study_module/` – study API (sounds, session, map, answers)
+- `modules/study_module/` – study API (session, map, answers, progress)
 
 ## Setup
 
@@ -28,13 +28,7 @@ Listens on `127.0.0.1:7100` by default (see `conf/local.yml`).
 ## API
 
 - `GET /` – health check
-- `GET /study/sounds` – list of 22 sounds (id, audioUrl, order)
-- `POST /study/session` – create session, returns `{ "sessionId": "..." }`
+- `POST /study/session` – create session, returns `{ "sessionId": "..." }` (optional progress for resume)
 - `POST /study/session/:id/map` – body `{ "positions": [{ "soundId", "x", "y" }] }`
 - `POST /study/session/:id/answers` – body `{ "groupStrategy", "groupsRepresent" }`
-
-Sessions and data are stored in memory. For production, add persistence (e.g. DB) in `study_service`.
-
-## Sounds
-
-The API returns sound entries with `audioUrl: "/sounds/s1.mp3"` … `/sounds/s22.mp3`. The client loads these from its own origin (`public/sounds/`). To serve sounds from this server, add a static file route for `/sounds/*` and optionally return full URLs in the sounds list.
+- `POST /study/session/:id/progress` – body `{ "currentStep", "listenedSoundIds", "soundGroups", "defineGroupsRectangles" }` (all optional, merge)
