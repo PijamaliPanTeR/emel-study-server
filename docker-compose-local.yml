@@ -1,0 +1,32 @@
+version: '3'
+services:
+  emel-study-server-postgres-local:
+    container_name: emel-study-server-postgres-local
+    command: postgres -c shared_preload_libraries=pg_stat_statements -c pg_stat_statements.track=all
+    environment:
+      - POSTGRES_DB=emel-study-server-local
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    expose:
+      - "5432"
+    image: postgres:12.2-alpine
+    ports:
+      - "6101:5432"
+    volumes:
+      - emel-study-server-data-local:/var/lib/postgresql/data-emel-study-server-local
+
+  emel-study-server-local:
+    container_name: emel-study-server-local
+    build:
+      context: .
+      dockerfile: Dockerfile.local
+    restart: "no"
+    depends_on:
+      - emel-study-server-postgres-local
+    expose:
+      - "6200"
+    ports:
+      - "6200:6200"
+
+volumes:
+  emel-study-server-data-local:

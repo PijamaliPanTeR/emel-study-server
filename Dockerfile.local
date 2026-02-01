@@ -1,0 +1,23 @@
+FROM golang:1.22.5-alpine
+
+# Install git and other necessary dependencies
+RUN apk add --no-cache git
+
+WORKDIR /app
+
+# Copy the go.mod and go.sum file and download the dependencies
+COPY go.mod go.sum ./
+RUN go mod download
+
+# Copy the rest of your application code
+COPY *.go ./
+COPY conf conf
+COPY modules modules
+COPY pkg pkg
+
+# Build your application
+RUN go build -o /emel-study-server-app
+
+EXPOSE 6100
+
+ENTRYPOINT [ "/emel-study-server-app",  "-env=local", "-config=./conf/local.yml" ]
