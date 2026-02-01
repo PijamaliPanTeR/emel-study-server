@@ -9,11 +9,32 @@ import (
 
 func (h *StudyHandlers) CreateSession(ctx context.Context) fiber.Handler {
 	return func(c *fiber.Ctx) error {
-		sessionID, err := h.service.CreateSession(ctx)
+		var req study_models.CreateSessionRequest
+		_ = c.BodyParser(&req)
+		resp, err := h.service.CreateSession(ctx, req.Fingerprint)
 		if err != nil {
 			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 		}
-		return c.JSON(fiber.Map{"sessionId": sessionID})
+		out := fiber.Map{"sessionId": resp.SessionID}
+		if resp.CurrentStep != "" {
+			out["currentStep"] = resp.CurrentStep
+		}
+		if len(resp.Positions) > 0 {
+			out["positions"] = resp.Positions
+		}
+		if resp.Answers != nil {
+			out["answers"] = resp.Answers
+		}
+		if len(resp.ListenedSoundIDs) > 0 {
+			out["listenedSoundIds"] = resp.ListenedSoundIDs
+		}
+		if len(resp.SoundGroups) > 0 {
+			out["soundGroups"] = resp.SoundGroups
+		}
+		if len(resp.DefineGroupsRectangles) > 0 {
+			out["defineGroupsRectangles"] = resp.DefineGroupsRectangles
+		}
+		return c.JSON(out)
 	}
 }
 
@@ -45,6 +66,23 @@ func (h *StudyHandlers) SaveAnswers(ctx context.Context) fiber.Handler {
 			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
 		}
 		if err := h.service.SaveAnswers(ctx, sessionID, req); err != nil {
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+		}
+		return c.JSON(fiber.Map{"ok": true})
+	}
+}
+
+func (h *StudyHandlers) SaveProgress(ctx context.Context) fiber.Handler {
+	return func(c *fiber.Ctx) error {
+		sessionID := c.Params("id")
+		if sessionID == "" {
+			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "missing session id"})
+		}
+		var req study_models.SaveProgressRequest
+		if err := c.BodyParser(&req); err != nil {
+			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
+		}
+		if err := h.service.SaveProgress(ctx, sessionID, req); err != nil {
 			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 		}
 		return c.JSON(fiber.Map{"ok": true})
